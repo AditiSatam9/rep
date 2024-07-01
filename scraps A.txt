@@ -1,0 +1,36 @@
+<?php
+session_start();
+require 'db.php'; // Include database connection
+
+// Define DataTables request variables
+$start = $_GET['start'] ?? 0; // Start index for pagination
+$length = $_GET['length'] ?? 10; // Number of records per page
+
+// Fetch files data from database
+$stmt_years = $pdo->query("SELECT * FROM file_years ORDER BY year DESC");
+$years = $stmt_years->fetchAll(PDO::FETCH_ASSOC);
+
+// Prepare data in DataTables format
+$data = array();
+foreach ($years as $year) {
+    $row = array(
+        "year" => $file['year'],
+        "volume" => $file['volume'],
+        "issue" => $file['issue'],
+        "date" => ucfirst($file['month']) . ' - ' . $file['year'],
+        "pdf_file" => $file['pdf_file']
+    );
+    $data[] = $row;
+}
+
+// Prepare response for DataTables
+$response = array(
+    "draw" => intval($_GET['draw'] ?? 1),
+    "recordsTotal" => count($data), // Total records (for server-side)
+    "recordsFiltered" => count($data), // Total records after filtering (for server-side)
+    "data" => $data // Data to display
+);
+
+// Output JSON response
+echo json_encode($response);
+?>
