@@ -1,3 +1,110 @@
+display.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Dashboard</title>
+</head>
+
+
+<script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#filesTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "fetch_files.php", // Endpoint for fetching data
+                "columns": [
+                    { "data": "year" },
+                    { "data": "volume" },
+                    { "data": "issue" },
+                    { "data": "date" },
+                    {
+                        "data": "pdf_file",
+                        "render": function(data, type, row, meta) {
+                            return '<a href="' + data + '" target="_blank" class="pdf-button1">Read It...</a>';
+                        }
+                    }
+                ]
+            });
+        });
+    
+ </script>
+
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="logo.png" alt="Company Logo">
+            </div>
+            <div class="company-name">
+                E-PUBLICATIONS
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h2>SIRDs Scientific Information Resource Bulletin</h2>
+        <hr>
+
+        <!-- DataTable for displaying files by year -->
+        <table id="sirb" class="display" style="width:100%"><div class="dataTables_length" id="filesTable_length"><label>Show <select name="filesTable_length" aria-controls="filesTable" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Volume</th>
+                    <th>Issue</th>
+                    <th>Date</th>
+                    <th>PDF Link</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <div class="footer-content">
+            &copy; <?php echo date('Y'); ?> Scientific Information Resource Division, KMG, BARC
+        </div>
+    </footer>
+
+    <!-- jQuery and DataTables JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#filesTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "fetch_files.php", // Endpoint for fetching data
+                "columns": [
+                    { "data": "year" },
+                    { "data": "volume" },
+                    { "data": "issue" },
+                    { "data": "date" },
+                    {
+                        "data": "pdf_file",
+                        "render": function(data, type, row, meta) {
+                            return '<a href="' + data + '" target="_blank" class="pdf-button1">Read It...</a>';
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+fetch_files.php
+
 <?php
 session_start();
 require 'db.php'; // Include database connection
